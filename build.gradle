@@ -1,0 +1,87 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.3'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+/**
+ * 配置阶段开始前的监听回调
+ */
+this.beforeEvaluate {
+    println '初始化阶段执行完毕...'
+}
+
+/**
+ * 配置阶段完成以后的回调
+ */
+this.afterEvaluate {
+    println '配置阶段执行完毕...'
+}
+
+/**
+ * gradle执行完毕后的回调
+ */
+this.gradle.buildFinished {
+    println '执行阶段执行完毕...'
+}
+
+//this.gradle.addListener()
+
+//获取到当前项目的所有Project
+//this.getAllprojects()
+
+
+this.getProjects()
+
+def getProjects() {
+    println '-----------------'
+    println 'Root Project'
+    println '-----------------'
+    this.getAllprojects().eachWithIndex { Project project, int index ->
+        if (index == 0) {
+            println "Root Project ':${project.name}'"
+        } else {
+            println "+--- project ':${project.name}'"
+        }
+
+    }
+}
+/**
+ * -----------------
+ * Root Project
+ * -----------------
+ * Root Project ':GradleStudy'
+ * +--- project ':app'
+ */
+
+this.getSubProjs()
+
+def getSubProjs() {
+    this.getSubprojects().eachWithIndex { Project project, int index ->
+        println "Gradle study sub project ':${project.name}'"
+    }
+}
+/**
+ * Gradle study sub project ':app'
+ */
