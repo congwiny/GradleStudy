@@ -21,14 +21,15 @@ android {
 // app应用程序的依赖库
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compile(this.appcompatv7) {
-        //排除依赖
-        exclude module: 'support-v4'
-        //把com.android.support包下的都排除
-        exclude group: 'com.android.support'
-        //应该减少对传递依赖的使用
-        transitive false //禁止传递依赖，gradle默认为false
-    }
+    compile this.appcompatv7
+//    compile(this.appcompatv7) {
+//        //排除依赖
+//        exclude module: 'support-v4'
+//        //把com.android.support包下的都排除
+//        exclude group: 'com.android.support'
+//        //应该减少对传递依赖的使用
+//        transitive false //禁止传递依赖，gradle默认为false
+//    }
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -71,6 +72,26 @@ def getRootProj() {
 
 //Root Project is GradleStudy
 println "Root Project is " + getRootProj()
+
+
+task(name: 'apkcopy') {
+    //gradle的执行阶段去执行
+    doLast {
+        def srcPath = this.buildDir.path + '/outputs/apk'
+        def destPath = '/Users/congwiny/Downloads/'
+        def cmd = "mv -f ${srcPath} ${destPath}"
+        exec {
+            try {
+                executable 'bash'
+                args '-c', cmd
+                println 'the cmd is execute success...'
+
+            } catch (GradleException e) {
+                println 'the cmd is execute failed...'
+            }
+        }
+    }
+}
 
 //apply plugin: 'com.android.application'
 //apply plugin: 'realm-android' //依赖Realm数据库，插件化依赖
