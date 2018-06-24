@@ -85,3 +85,49 @@ def getSubProjs() {
 /**
  * Gradle study sub project ':app'
  */
+
+//--------------------
+/**
+ * 在父Project管理配置子Project
+ */
+
+//找到app这个子Project
+project('app') { Project project ->
+    //project ->app
+    //println "project ->"+project.name
+
+    //指定输出
+    apply plugin: 'com.android.application'
+    //指定group
+    group 'com.cw'
+    //指定版本号
+    version '1.0'
+
+    //指定依赖
+    dependencies {
+
+    }
+
+    //指定Android模块
+    android {
+
+    }
+}
+
+//配置当前节点工程和其subproject的所有project
+allprojects {
+    //指定group
+    group 'com.cw'
+    //指定版本号
+    version '1.0'
+}
+//test project group is com.cw
+println "test project group is " + project('test').group
+
+//不包括当前节点工程，只包括它的subproject
+subprojects { project ->
+    //子工程如果是library，就上传到maven仓库
+    if (project.plugins.hasPlugin('com.android.library')){
+        apply from :'../publishToMaven.gradle'
+    }
+}
