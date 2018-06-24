@@ -3,13 +3,28 @@
 //file()也是Project提供的一个方法，从当前工程下寻找指定名字的文件
 //apply from: this.file('common.gradle')
 
-buildscript {
+buildscript { ScriptHandler handler ->
 
-    repositories {
-        google()
-        jcenter()
+    //配置工程的仓库地址
+    handler.repositories { RepositoryHandler repositoryHandler ->
+        repositoryHandler.google()
+        repositoryHandler.jcenter()
+
+        //私有的maven仓库
+        repositoryHandler.maven {
+            name 'congwiny'
+            url 'http://xxxx.com/nexus/repositories'
+            //配置用户名密码
+            credentials {
+                username = 'admin'
+                password = 'admin123'
+            }
+        }
     }
-    dependencies {
+
+    //配置工程的"插件"依赖地址 （写gradle程序的依赖库）
+    handler.dependencies {
+        //可指定 android, library
         classpath 'com.android.tools.build:gradle:3.1.3'
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -130,30 +145,29 @@ allprojects {
 //不包括当前节点工程，只包括它的subproject
 subprojects { project ->
     //子工程如果是library，就上传到maven仓库
-    if (project.plugins.hasPlugin('com.android.library')){
-        apply from :'../publishToMaven.gradle'
+    if (project.plugins.hasPlugin('com.android.library')) {
+        apply from: '../publishToMaven.gradle'
     }
 }
-
 
 /**
  * 根Project定义的扩展属性，可被子Project继承
  */
-ext{
+ext {
     compileSdkV = 27
     appcompatv7 = 'com.android.support:appcompat-v7:27.1.1'
 }
 
 //获取当前项目根工程文件路径
-println "the root file path is: "+getRootDir().absolutePath
+println "the root file path is: " + getRootDir().absolutePath
 //the root file path is: /Users/congwiny/Develop/Android/StudioProjects/GradleStudy
 
 //获取当前工程下build文件路径
-println "the build file path is: "+getBuildDir().absolutePath
+println "the build file path is: " + getBuildDir().absolutePath
 //the build file path is: /Users/congwiny/Develop/Android/StudioProjects/GradleStudy/build
 
 //获取当前工程的文件路径
-println "the project file path is: "+getProjectDir().absolutePath
+println "the project file path is: " + getProjectDir().absolutePath
 //the project file path is: /Users/congwiny/Develop/Android/StudioProjects/GradleStudy
 
 /**
@@ -161,12 +175,12 @@ println "the project file path is: "+getProjectDir().absolutePath
  * @param path 文件的路径
  * @return
  */
-def getFileContent(String path){
-    try{
+def getFileContent(String path) {
+    try {
         //file()方法好处是无需传绝对路径，路径会被此方法转换为相对于当前project的相对路径
         def file = file(path)//相对于当前的project开始查找
-        return  file.text
-    }catch (GradleException e){
+        return file.text
+    } catch (GradleException e) {
         println 'file not found...'
     }
     return null
