@@ -93,13 +93,22 @@ task apkcopy {
     }
 }
 
-//默认在配置阶段执行（执行一个task,下面几个task的内容输出都会执行）
+//默认在配置阶段执行（执行一个task,下面几个task，除了doFirst/doLast所在的任务，都会在配置阶段执行）
 task(ahelloTask {
     println 'I am a hello task'
 })
 
+
 task ahelloTask2 {
     println 'I am a hello task2'
+    doFirst {
+        println 'ahello task2 doFirst execute.. '
+    }
+}
+
+//先执行外部的doFirst，后执行内部的doFirst
+ahelloTask2.doFirst {
+    println 'ahello task doFirst execute.'
 }
 
 this.tasks.create(name: 'ahellotask3') {
