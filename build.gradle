@@ -130,4 +130,12 @@ subprojects { project ->
     if (project.plugins.hasPlugin('com.android.library')){
         apply from :'../publishToMaven.gradle'
     }
+
+    /**
+     * 定义扩展属性
+     */
+    ext{
+        compileSdkV = 27
+        appcompatv7 = 'com.android.support:appcompat-v7:27.1.1'
+    }
 }
