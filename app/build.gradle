@@ -74,7 +74,7 @@ def getRootProj() {
 println "Root Project is " + getRootProj()
 
 
-task(name: 'apkcopy') {
+task apkcopy {
     //gradle的执行阶段去执行
     doLast {
         def srcPath = this.buildDir.path + '/outputs/apk'
@@ -92,6 +92,32 @@ task(name: 'apkcopy') {
         }
     }
 }
+
+//默认在配置阶段执行（执行一个task,下面几个task的内容输出都会执行）
+task(ahelloTask {
+    println 'I am a hello task'
+})
+
+task ahelloTask2 {
+    println 'I am a hello task2'
+}
+
+this.tasks.create(name: 'ahellotask3') {
+    println 'I am a hello task3'
+}
+
+//Task创建时，同时指定配置：分组和描述
+task helloTask(group:'congwiny', description:'task study'){
+    println 'I am a hello task with group and description'
+}
+
+//Task调用其配置方法进行配置
+this.tasks.create(name:'helloTask2'){
+    setGroup('congwiny')
+    setDescription('task study')
+    println 'I am a hello task2 with group and description'
+}
+
 
 //apply plugin: 'com.android.application'
 //apply plugin: 'realm-android' //依赖Realm数据库，插件化依赖
