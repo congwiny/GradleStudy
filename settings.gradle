@@ -1,3 +1,8 @@
-include ':app', ':test'
+include ':app'
+
+if (hasProperty('isLoadTest') ? isLoadTest.toBoolean() : false) {
+    include ':test'
+}
+
 
 println '初始化阶段开始执行...'

@@ -125,7 +125,7 @@ allprojects {
     version '1.0'
 }
 //test project group is com.cw
-println "test project group is " + project('test').group
+//println "test project group is " + project('test').group
 
 //不包括当前节点工程，只包括它的subproject
 subprojects { project ->
