@@ -143,3 +143,34 @@ ext{
     compileSdkV = 27
     appcompatv7 = 'com.android.support:appcompat-v7:27.1.1'
 }
+
+//获取当前项目根工程文件路径
+println "the root file path is: "+getRootDir().absolutePath
+//the root file path is: /Users/congwiny/Develop/Android/StudioProjects/GradleStudy
+
+//获取当前工程下build文件路径
+println "the build file path is: "+getBuildDir().absolutePath
+//the build file path is: /Users/congwiny/Develop/Android/StudioProjects/GradleStudy/build
+
+//获取当前工程的文件路径
+println "the project file path is: "+getProjectDir().absolutePath
+//the project file path is: /Users/congwiny/Develop/Android/StudioProjects/GradleStudy
+
+/**
+ * 文件定位
+ * @param path 文件的路径
+ * @return
+ */
+def getFileContent(String path){
+    try{
+        //file()方法好处是无需传绝对路径，路径会被此方法转换为相对于当前project的相对路径
+        def file = file(path)//相对于当前的project开始查找
+        return  file.text
+    }catch (GradleException e){
+        println 'file not found...'
+    }
+    return null
+}
+
+println getFileContent('common.gradle')
+

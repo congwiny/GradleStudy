@@ -49,7 +49,7 @@ def getProjects() {
  * app Root Project ':app'
  */
 
-def getParentProject(){
+def getParentProject() {
     def name = this.getParent().name
     println "the parent project name is ${name}"
 }
@@ -57,14 +57,12 @@ def getParentProject(){
 getParentProject()
 
 
-def getRootProj(){
+def getRootProj() {
     this.getRootProject().name
 }
 
 //Root Project is GradleStudy
-println "Root Project is "+getRootProj()
-
-
+println "Root Project is " + getRootProj()
 
 //apply plugin: 'com.android.application'
 //apply plugin: 'realm-android' //依赖Realm数据库，插件化依赖
@@ -197,4 +195,23 @@ println "Root Project is "+getRootProj()
 //    }
 //}
 
+//既可以拷贝文件，也可拷贝文件夹
+//copy{
+//    from file('proguard-rules.pro')
+//    into getRootProject().getBuildDir()
+//    //可通过exclude闭包，去掉不想拷贝的文件
+//    exclude{}
+//    //可以通过rename闭包，对拷贝的文件重命名
+//    rename {}
+//}
 
+//对文件树进行遍历(对文件夹遍历)
+fileTree('build/outputs/apk/') { FileTree fileTree ->
+    fileTree.visit { FileTreeElement element ->
+        println 'the file name is:' + element.file.name
+        copy {
+            from element.file
+            into getRootProject().getBuildDir().path + '/test/'
+        }
+    }
+}
