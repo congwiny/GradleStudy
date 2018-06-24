@@ -1,5 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+//file()也是Project提供的一个方法，从当前工程下寻找指定名字的文件
+//apply from: this.file('common.gradle')
+
 buildscript {
 
     repositories {
