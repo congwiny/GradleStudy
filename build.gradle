@@ -188,3 +188,40 @@ def getFileContent(String path) {
 
 println getFileContent('common.gradle')
 
+
+task taskA {
+    doLast {
+        println 'taskA'
+    }
+}
+
+task taskB {
+    doLast {
+        println 'taskB'
+    }
+}
+
+//依赖一个task
+task taskC(dependsOn: taskA) {
+    doLast {
+        println 'taskC'
+    }
+}
+
+//依赖多个task
+task taskD(dependsOn: [taskA, taskB]) {
+    doLast {
+        println 'taskD'
+    }
+}
+
+
+
+//调用task的依赖方法(推荐使用上面的依赖方法，比较简洁)
+task taskE{
+    doLast {
+        println 'taskE'
+    }
+}
+
+taskE.dependsOn(taskA, taskB, taskC)
