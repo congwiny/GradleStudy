@@ -224,7 +224,7 @@ task taskC(dependsOn: taskA) {
     }
 }
 
-//依赖多个task
+//依赖多个task，所依赖的task的执行顺序是随机的
 task taskD(dependsOn: [taskA, taskB]) {
     doLast {
         println 'taskD'
@@ -239,5 +239,28 @@ task taskE{
         println 'taskE'
     }
 }
-
+//taskA, taskB, taskC执行顺序是随机的
 taskE.dependsOn(taskA, taskB, taskC)
+
+//为task动态的添加依赖
+task lib1 << { // "<<" 这个符号表示最追加符，等同于doLast
+    println 'lib1'
+}
+
+task lib2 << {
+    println 'lib2'
+}
+
+task noLib << {
+    println 'noLib'
+}
+
+//taskF要依赖以lib开头的task
+task taskF {
+    dependsOn this.tasks.findAll { task ->
+        return task.name.startsWith('lib')
+    }
+    doLast {
+        println 'taskF'
+    }
+}
