@@ -1,3 +1,5 @@
+import groovy.xml.MarkupBuilder
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 //file()也是Project提供的一个方法，从当前工程下寻找指定名字的文件
@@ -36,15 +38,15 @@ plugins { id 'cz.malohlava' version '1.0.3' }
 
 
 visteg {
-    enabled        = true
-    colouredNodes  = true
-    colouredEdges  = true
-    destination    = 'build/reports/visteg.dot'
-    exporter       = 'dot'
-    colorscheme    = 'spectral11'
-    nodeShape      = 'box'
+    enabled = true
+    colouredNodes = true
+    colouredEdges = true
+    destination = 'build/reports/visteg.dot'
+    exporter = 'dot'
+    colorscheme = 'spectral11'
+    nodeShape = 'box'
     startNodeShape = 'hexagon'
-    endNodeShape   = 'doubleoctagon'
+    endNodeShape = 'doubleoctagon'
 }
 
 
@@ -231,10 +233,8 @@ task taskD(dependsOn: [taskA, taskB]) {
     }
 }
 
-
-
 //调用task的依赖方法(推荐使用上面的依赖方法，比较简洁)
-task taskE{
+task taskE {
     doLast {
         println 'taskE'
     }
@@ -263,4 +263,97 @@ task taskF {
     doLast {
         println 'taskF'
     }
+}
+
+//task的输入输出
+ext {
+    versonName = '1.0.4'
+    versionCode = '104'
+    versionInfo = 'App的第4个版本'
+    destFile = file('releases.xml')
+    if (!destFile.exists()) {
+        destFile.createNewFile()
+    }
+}
+
+//将上面定义的属性，传给task
+task writeTask {
+    //为task指定输入
+    inputs.property('versionName', this.versionCode)
+    inputs.property('versionCode', this.versionCode)
+    inputs.property('versionInfo', this.versionInfo)
+    //destFile做为writeTask指定输出，会先被执行
+    outputs.file this.destFile
+
+    doLast {
+        println 'writeTask execute...'
+        def data = inputs.getProperties()
+        File file = outputs.getFiles().getSingleFile()
+        //将map转换为实体对象
+        def versionMsg = new VersionMsg(data)
+        def sw = new StringWriter()
+        def xmlBuilder = new MarkupBuilder(sw)
+        if (file.text != null && file.text.size() <= 0) {
+            xmlBuilder.releases {
+                release {
+                    versionCode(versionMsg.versionCode)
+                    versionName(versionMsg.versionName)
+                    versionInfo(versionMsg.versionInfo)
+                }
+            }
+            file.withWriter { writer ->
+                writer.append(sw.toString())
+            }
+        } else {
+            //xml已有版本信息
+            xmlBuilder.release {
+                versionCode(versionMsg.versionCode)
+                versionName(versionMsg.versionName)
+                versionInfo(versionMsg.versionInfo)
+            }
+
+            def lines = file.readLines()
+
+            //将生成的xml数据插入到根节点之前
+            def lengths = lines.size() - 1
+            file.withWriter { writer ->
+                lines.eachWithIndex { String line, int index ->
+                    if (index != lengths) {
+                        writer.append(line + '\r\n')
+                    } else {
+                        writer.append('\r\n' + sw.toString() + '\r\n')
+                        writer.append(lines.get(lengths))
+                    }
+                }
+            }
+        }
+    }
+}
+
+//读任务
+task readTask {
+    //destFile做为readTask的输入
+    inputs.file this.destFile
+
+    doLast {
+        println 'readTask execute...'
+        def file = inputs.files.singleFile
+        println file.text
+    }
+}
+
+//destFile作为输入输出文件，把writeTask和readTask关联起来了
+
+task taskTest {
+    dependsOn  writeTask,readTask
+    doLast {
+        println '输入输出任务结束'
+    }
+}
+
+
+class VersionMsg {
+    String versionCode
+    String versionName
+    String versionInfo
 }
