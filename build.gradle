@@ -357,3 +357,26 @@ class VersionMsg {
     String versionName
     String versionInfo
 }
+
+//mustRunAfter 指定Task执行顺序
+task taskL {
+    doLast {
+        println 'TaskL'
+    }
+}
+
+task taskM {
+    mustRunAfter taskL
+    doLast {
+        println 'TaskM'
+    }
+}
+
+task taskN {
+    mustRunAfter taskM
+    doLast {
+        println 'TaskN'
+    }
+}
+
+// ./gradlew taskN taskL taskM
