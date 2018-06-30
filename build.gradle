@@ -32,6 +32,22 @@ buildscript { ScriptHandler handler ->
     }
 }
 
+plugins { id 'cz.malohlava' version '1.0.3' }
+
+
+visteg {
+    enabled        = true
+    colouredNodes  = true
+    colouredEdges  = true
+    destination    = 'build/reports/visteg.dot'
+    exporter       = 'dot'
+    colorscheme    = 'spectral11'
+    nodeShape      = 'box'
+    startNodeShape = 'hexagon'
+    endNodeShape   = 'doubleoctagon'
+}
+
+
 allprojects {
     repositories {
         google()
