@@ -380,3 +380,14 @@ task taskN {
 }
 
 // ./gradlew taskN taskL taskM
+
+////将task挂接到生命周期中
+//this.project.afterEvaluate {project ->
+//    def buildTask = project.tasks.getByName('build')
+//    if(buildTask == null){
+//        throw GradleException('the build task is not found')
+//    }
+//    buildTask.doLast {
+//        writeTask.execute()
+//    }
+//}
