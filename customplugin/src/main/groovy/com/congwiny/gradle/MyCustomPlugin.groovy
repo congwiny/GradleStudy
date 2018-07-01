@@ -15,5 +15,8 @@ class MyCustomPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         println "Hello Plugin ${project.name}"
+
+        project.extensions.create('customReleaseInfo', ReleaseInfoExt)
+        project.tasks.create('ReleaseInfoTask', ReleaseInfoTask)
     }
 }

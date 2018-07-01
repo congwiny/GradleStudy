@@ -58,3 +58,14 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
+
+/**
+ * 为自定义插件传递参数
+ */
+customReleaseInfo{
+    versionCode = rootProject.ext.versionCode
+    versionName = rootProject.ext.versonName
+    versionInfo = '第8个版本'
+    fileName = 'releases.xml'
+}
+
