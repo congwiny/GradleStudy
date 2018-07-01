@@ -1,4 +1,5 @@
 apply plugin: 'groovy'
+apply plugin: 'maven'
 
 sourceSets {
     main{
@@ -7,6 +8,27 @@ sourceSets {
         }
         resources{
             srcDir 'src/main/resources'
+        }
+    }
+}
+
+//https://blog.csdn.net/sbsujjbcy/article/details/50782830
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+}
+
+repositories {
+    mavenCentral()
+}
+
+group='com.congwiny.gradle.plugin'
+version='1.0.0'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
         }
     }
 }
