@@ -16,17 +16,17 @@ android {
 
     }
 
-    sourceSets {
-        //AndroidSourceSet
-        main {
-            //修改so文件存放的位置由jniLibs为libs目录
-            jniLibs.srcDirs = ['libs']
-            //修改res资源存放的位置
-            res.srcDirs = ['src/main/res',
-                           'src/main/res_ad/',
-                           'src/main/res_player']
-        }
-    }
+//    sourceSets {
+//        //AndroidSourceSet
+//        main {
+//            //修改so文件存放的位置由jniLibs为libs目录
+//            jniLibs.srcDirs = ['libs']
+//            //修改res资源存放的位置
+//            res.srcDirs = ['src/main/res',
+//                           'src/main/res_ad/',
+//                           'src/main/res_player']
+//        }
+//    }
 
     buildTypes {
         release {
@@ -35,6 +35,17 @@ android {
         }
     }
 
+}
+
+this.android.sourceSets{
+    main {
+        //修改so文件存放的位置由jniLibs为libs目录
+        jniLibs.srcDirs = ['libs']
+        //修改res资源存放的位置
+        res.srcDirs = ['src/main/res',
+                       'src/main/res_ad/',
+                       'src/main/res_player']
+    }
 }
 
 dependencies {
