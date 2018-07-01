@@ -84,5 +84,13 @@ this.afterEvaluate {
              */
             println output.outputFile
         }
+
+        //访问变体的task
+        def task = variant.checkManifest
+        /**
+         * this variant's task checkManifest name is checkDebugManifest
+         * this variant's task checkManifest name is checkReleaseManifest
+         */
+        println "this variant's task checkManifest name is ${task.name}"
     }
 }
