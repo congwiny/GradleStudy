@@ -1,4 +1,4 @@
-include ':app'
+include ':app', ':customplugin'
 
 if (hasProperty('isLoadTest') ? isLoadTest.toBoolean() : false) {
     include ':test'
