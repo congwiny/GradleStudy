@@ -69,3 +69,20 @@ customReleaseInfo{
     fileName = 'releases.xml'
 }
 
+this.afterEvaluate {
+    //操作变体
+    this.android.applicationVariants.all{ variant ->
+        def name = variant.name
+        def baseName = variant.baseName
+
+        //applicationVariants的输出文件是apk
+        variant.outputs.all{ output ->
+            outputFileName = "app-${baseName}-${variant.versionCode}.apk"
+            /**
+             * /Users/congwiny/Develop/Android/StudioProjects/GradleStudy/test/build/outputs/apk/debug/app-debug-1.apk
+             /Users/congwiny/Develop/Android/StudioProjects/GradleStudy/test/build/outputs/apk/release/app-release-1.apk
+             */
+            println output.outputFile
+        }
+    }
+}
